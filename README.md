@@ -37,7 +37,7 @@ These connections are classified as **High-Throughput (AF13**) by default and th
 1. To install the main dscpclassify service via command line you can use the following commands:
 
 ```
-repo="https://raw.githubusercontent.com/jeverley/dscpclassify/main"
+repo="https://raw.githubusercontent.com/ldir-EDB0/dscpclassify/main"
 mkdir -p "/etc/dscpclassify.d"
 if [ ! -f "/etc/config/dscpclassify" ]; then
     wget "$repo/etc/config/dscpclassify" -O "/etc/config/dscpclassify"
@@ -58,7 +58,7 @@ chmod +x "/etc/init.d/dscpclassify"
 2. To install the SQM setup script via command line you can use the following commands:
 
 ```
-repo="https://raw.githubusercontent.com/jeverley/dscpclassify/main"
+repo="https://raw.githubusercontent.com/ldir-EDB0/dscpclassify/main"
 opkg update
 opkg install kmod-sched-ctinfo
 wget "$repo/usr/lib/sqm/layer_cake_ct.qos" -O "/usr/lib/sqm/layer_cake_ct.qos"
