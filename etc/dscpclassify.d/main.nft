@@ -48,7 +48,8 @@ table inet dscpclassify {
     chain postrouting {
         type filter hook postrouting priority mangle + 2; policy accept
         oif "lo" counter return
-        ct mark & $ct_service == 0 meta l4proto == tcp ct original packets lt 3 counter return
+#        ct mark & $ct_service == 0 meta l4proto == tcp ip dscp == cs0 ct original packets lt 3 counter return
+#        ct mark & $ct_service == 0 meta l4proto == tcp ip6 dscp == cs0 ct original packets lt 3 counter return
         ct mark & $ct_service == 0 ct direction original counter jump static_classify
         ct mark & $ct_dynamic != 0 counter jump dynamic_classify
 
@@ -60,6 +61,9 @@ table inet dscpclassify {
 
         ## Non TCP/UDP unclassified connections are Best Effort (CS0)
         meta l4proto != { tcp, udp } counter goto ct_set_cs0
+
+	meta l4proto tcp ip dscp cs0 ct original packets < 3 counter return
+	meta l4proto tcp ip6 dscp cs0 ct original packets < 3 counter return
 
         ## Set the dynamic conntrack bit on unclassified connections
         ct mark set ct mark & $ct_unused | $ct_dynamic counter

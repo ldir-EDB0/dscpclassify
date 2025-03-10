@@ -728,6 +728,9 @@ create_post_include() {
 	create_threaded_client_rule || return 1
 	create_threaded_service_rule || return 1
 
+#	post_include "insert rule inet dscpclassify static_classify meta l4proto tcp ip dscp cs0 ct original packets < 3 counter return"
+#	post_include "insert rule inet dscpclassify static_classify meta l4proto tcp ip6 dscp cs0 ct original packets < 3 counter return"
+
 	create_dscp_mark_rule || return 1
 }
 
