@@ -367,6 +367,7 @@ create_user_set() {
 	config_get type "$1" type # allows user to explicity specify the nft set type
 	config_get size "$1" maxelem
 	config_get timeout "$1" timeout
+	config_get entryfile "$1" entryfile
 
 	config_get_bool flag_constant "$1" constant
 	config_get_bool flag_interval "$1" interval
@@ -392,6 +393,7 @@ create_user_set() {
 	}
 
 	[ -n "$entry$element" ] && post_include "add element inet dscpclassify $name { $(format_list "$entry $element" ", ") }"
+	[ -n "$entryfile" ] && post_include "add element inet dscpclassify $name { $(format_list "$(cat $entryfile)" ", ") }"
 
 	return 0
 }
