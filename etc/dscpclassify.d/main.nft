@@ -38,18 +38,18 @@ include "/tmp/etc/dscpclassify.d/pre-include.nft"
 table inet dscpclassify {
     ## Classify connections to the router
     chain input {
-        iif "lo" return
-        ct mark & $ct_service == 0 ct direction original jump rule_classify
         type filter hook input priority mangle + 2; policy accept
+        iif "lo" counter return
+        ct mark & $ct_service == 0 ct direction original counter jump rule_classify
         # Client hints jump added here by the init script if enabled
         # Dynamic classify jump added here by the init script if enabled
     }
 
     ## Classify and DSCP mark connections from/forwarded via the router
     chain postrouting {
-        oif "lo" return
-        ct mark & $ct_service == 0 ct direction original jump rule_classify
         type filter hook postrouting priority mangle + 2; policy accept
+        oif "lo" counter return
+        ct mark & $ct_service == 0 ct direction original counter jump rule_classify
         # Client hints jump added here by the init script if enabled
         # Dynamic classify jump added here by the init script if enabled
 
@@ -60,10 +60,10 @@ table inet dscpclassify {
         ## User defined rules in '/etc/config/dscpclassify' are inserted here by the init script
 
         ## Non TCP/UDP unclassified connections are Best Effort (CS0)
-        meta l4proto != { tcp, udp } goto ct_set_cs0
+        meta l4proto != { tcp, udp } counter goto ct_set_cs0
 
         ## Set the dynamic conntrack bit on unclassified connections
-        ct mark set ct mark & $ct_unused | $ct_dynamic
+        ct mark set ct mark & $ct_unused | $ct_dynamic counter
     }
 
     chain client_classify {
@@ -74,17 +74,17 @@ table inet dscpclassify {
 
     chain dynamic_classify {
         ## Unreplied connections are ignored by dynamic classification logic
-        ct status and seen-reply != seen-reply return
+        ct status and seen-reply != seen-reply counter return
 
         ## Handle connection replies
-        ct direction reply goto dynamic_classify_reply
+        ct direction reply counter goto dynamic_classify_reply
 
         ## Dynamic rules are added here by the init script
     }
 
     chain dynamic_classify_reply {
         ## Established connection
-        ct mark & $ct_processed == 0 ct mark set ct mark | $ct_processed jump established_connection
+        ct mark & $ct_processed == 0 ct mark set ct mark | $ct_processed counter jump established_connection
 
         ## Dynamic rules are added here by the init script
     }
