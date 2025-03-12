@@ -41,7 +41,7 @@ To install dscpclassify via command line you can use the following sets of comma
 ### dscpclassify 
 
 ```
-repo="https://raw.githubusercontent.com/jeverley/dscpclassify/main"
+repo="https://raw.githubusercontent.com/ldir-EDB0/dscpclassify/main"
 mkdir -p "/etc/dscpclassify.d"
 if [ ! -f "/etc/config/dscpclassify" ]; then
     wget "$repo/etc/config/dscpclassify" -O "/etc/config/dscpclassify"
@@ -74,7 +74,7 @@ wget "$repo/usr/lib/sqm/layer_cake_ct.qos.help" -O "/usr/lib/sqm/layer_cake_ct.q
 ##### OpenWrt versions using opkg
 
 ```
-repo="https://raw.githubusercontent.com/jeverley/dscpclassify/main"
+repo="https://raw.githubusercontent.com/ldir-EDB0/dscpclassify/main"
 opkg update
 opkg install kmod-sched-ctinfo
 wget "$repo/usr/lib/sqm/layer_cake_ct.qos" -O "/usr/lib/sqm/layer_cake_ct.qos"
