@@ -38,18 +38,18 @@ include "/tmp/etc/dscpclassify.d/pre-include.nft"
 table inet dscpclassify {
     ## Classify connections to the router
     chain input {
-        type filter hook input priority 2; policy accept
         iif "lo" return
         ct mark & $ct_service == 0 ct direction original jump rule_classify
+        type filter hook input priority mangle + 2; policy accept
         # Client hints jump added here by the init script if enabled
         # Dynamic classify jump added here by the init script if enabled
     }
 
     ## Classify and DSCP mark connections from/forwarded via the router
     chain postrouting {
-        type filter hook postrouting priority 2; policy accept
         oif "lo" return
         ct mark & $ct_service == 0 ct direction original jump rule_classify
+        type filter hook postrouting priority mangle + 2; policy accept
         # Client hints jump added here by the init script if enabled
         # Dynamic classify jump added here by the init script if enabled
 
